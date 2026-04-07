@@ -1,11 +1,29 @@
 class FlashcardApp {
     constructor() {
-        this.flashcards = []; this.currentIndex = 0; this.studiedCards = new Set(); this.init();
+        this.flashcards = [];
+        this.currentIndex = 0;
+        this.studiedCards = new Set();
+        this.init();
     }
-    init() { this.loadFromStorage(); this.setupEventListeners(); this.updateDisplay(); }
+    init() {
+        this.loadFromStorage();
+        this.setupEventListeners();
+        this.updateDisplay();
+    }
     setupEventListeners() {
-        const ids = { 'flashcard': () => this.flipCard(), 'prev-btn': () => this.navigate(-1), 'next-btn': () => this.navigate(1), 'add-card-btn': () => this.modal(1), 'shuffle-btn': () => this.shuffle(), 'reset-progress-btn': () => this.reset(), 'mark-known': () => this.mark(true), 'mark-unknown': () => this.mark(false) };
-        Object.entries(ids).forEach(([id, cb]) => document.getElementById(id)?.addEventListener('click', cb));
+        const ids = {
+            'flashcard': () => this.flipCard(),
+            'prev-btn': () => this.navigate(-1),
+            'next-btn': () => this.navigate(1),
+            'add-card-btn': () => this.modal(1),
+            'shuffle-btn': () => this.shuffle(),
+            'reset-progress-btn': () => this.reset(),
+            'mark-known': () => this.mark(true),
+            'mark-unknown': () => this.mark(false)
+        };
+        Object.entries(ids).forEach(([id, cb]) => {
+            document.getElementById(id)?.addEventListener('click', cb);
+        });
         document.querySelector('.close').onclick = () => this.modal(0);
         document.getElementById('add-card-form').onsubmit = (e) => this.addCard(e);
         window.onclick = (e) => e.target.id === 'add-card-modal' && this.modal(0);
@@ -35,8 +53,9 @@ class FlashcardApp {
         e.preventDefault();
         const f = document.getElementById('front-input').value.trim(), b = document.getElementById('back-input').value.trim(), c = document.getElementById('category-input').value.trim() || 'general';
         if (f && b) {
-            this.flashcards.push({ id: Date.now(), front: f, back: b, category: c, known: false });
-            this.save(); this.updateDisplay(); this.modal(0); alert('Added!');
+            const newCard = { id: Date.now(), front: f, back: b, category: c, known: false };
+            this.flashcards.push(newCard); this.currentIndex = this.flashcards.length - 1;
+            this.save(); this.updateDisplay(); this.modal(0); alert('Card Added Successfully!');
         }
     }
     shuffle() {
