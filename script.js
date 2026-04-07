@@ -25,7 +25,7 @@ class FlashcardApp {
             document.getElementById(id)?.addEventListener('click', cb);
         });
         document.querySelector('.close').onclick = () => this.modal(0);
-        document.getElementById('add-card-form').onsubmit = (e) => this.addCard(e);
+        document.getElementById('add-card-form').addEventListener('submit', (e) => this.addCard(e));
         window.onclick = (e) => e.target.id === 'add-card-modal' && this.modal(0);
         document.onkeydown = (e) => {
             if (e.key === 'ArrowLeft') this.navigate(-1);
@@ -87,7 +87,16 @@ class FlashcardApp {
         document.getElementById('progress').textContent = `Progress: ${len ? Math.round((this.studiedCards.size / len) * 100) : 0}%`;
     }
     save() {
-        localStorage.setItem('flashcardApp', JSON.stringify({ flashcards: this.flashcards, currentIndex: this.currentIndex, studiedCards: Array.from(this.studiedCards) }));
+        try {
+            const data = { 
+                flashcards: this.flashcards, 
+                currentIndex: this.currentIndex, 
+                studiedCards: Array.from(this.studiedCards) 
+            };
+            localStorage.setItem('flashcardApp', JSON.stringify(data));
+        } catch (err) {
+            console.warn("Storage failed:", err);
+        }
     }
     loadFromStorage() {
         const d = JSON.parse(localStorage.getItem('flashcardApp') || '{}');
@@ -102,6 +111,11 @@ class FlashcardApp {
         ].map((c, i) => ({ ...c, id: i, category: 'basic', known: false }));
     }
 }
-document.addEventListener('DOMContentLoaded', () => new FlashcardApp());
+const initApp = () => new FlashcardApp();
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
 
 
