@@ -17,6 +17,8 @@ button:hover { background: #3182ce; transform: translateY(-2px); }
 #prev-btn:hover, #next-btn:hover, #mark-known:hover { background: #38a169; }
 #mark-unknown { background: #ed8936; }
 #mark-unknown:hover { background: #dd6b20; }
+.delete-icon { position: absolute; top: 10px; right: 10px; background: #f56565; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; transition: 0.3s; z-index: 10; }
+.delete-icon:hover { background: #e53e3e; transform: scale(1.1); }
 .flashcard-container { perspective: 1000px; margin-bottom: 30px; display: flex; justify-content: center; }
 .flashcard { width: 100%; max-width: 500px; height: 300px; position: relative; transform-style: preserve-3d; transition: 0.6s; cursor: pointer; }
 .flashcard.flipped { transform: rotateY(180deg); }

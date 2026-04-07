@@ -25,6 +25,12 @@ class FlashcardApp {
         Object.entries(ids).forEach(([id, cb]) => {
             document.getElementById(id)?.addEventListener('click', cb);
         });
+        document.querySelectorAll('.delete-icon').forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.deleteCurrentCard();
+            });
+        });
         document.querySelector('.close').onclick = () => this.modal(0);
         document.getElementById('submit-card').addEventListener('click', () => this.addCard());
         window.onclick = (e) => e.target.id === 'add-card-modal' && this.modal(0);
@@ -75,6 +81,15 @@ class FlashcardApp {
             this.studiedCards.clear(); this.flashcards.forEach(c => c.known = false);
             this.currentIndex = 0; document.getElementById('flashcard').classList.remove('flipped');
             this.save(); this.updateDisplay(); alert('Reset!');
+        }
+    }
+    deleteCurrentCard() {
+        if (!this.flashcards.length) return alert('No cards to delete!');
+        if (confirm('Are you sure you want to delete this card?')) {
+            this.flashcards.splice(this.currentIndex, 1);
+            if (this.currentIndex >= this.flashcards.length && this.flashcards.length > 0) this.currentIndex = this.flashcards.length - 1;
+            else if (this.flashcards.length === 0) this.currentIndex = 0;
+            this.save(); this.updateDisplay(); alert('Card Deleted!');
         }
     }
     updateDisplay() {
