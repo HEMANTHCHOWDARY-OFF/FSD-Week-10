@@ -1,37 +1,300 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea, #764ba2); min-height: 100vh; color: #333; }
-.container { max-width: 800px; margin: 0 auto; padding: 20px; }
-header, .navigation { background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 30px; }
-.navigation { padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
-h1 { color: #4a5568; margin-bottom: 15px; font-size: 2.5em; }
-.stats, .controls, .study-controls { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 30px; }
-.stats { justify-content: space-around; gap: 20px; }
-.stats span { background: #f7fafc; padding: 8px 16px; border-radius: 20px; font-weight: bold; color: #4a5568; }
-button { background: #4299e1; color: #fff; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font: bold 16px Arial; transition: 0.3s; }
-button:hover { background: #3182ce; transform: translateY(-2px); }
+/* 
+   Language Learning Flashcards - Main Stylesheet
+   This file contains all the styling for the application, including layout, 
+   animations for the flashcard flipping, and responsive design. 
+*/
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Layout Container */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+/* Header and Navigation Component Styles */
+header, 
+footer,
+.navigation {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 24px;
+    border-radius: 16px;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.navigation {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Typography Styles */
+h1 {
+    color: #2d3748;
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+    letter-spacing: -1px;
+}
+
+h2 {
+    color: #4a5568;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+/* Statistics Section */
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-item label {
+    font-size: 0.8rem;
+    color: #718096;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.stat-item span {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #4a5568;
+}
+
+/* General Button Component */
+button {
+    background: #4299e1;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+button:hover {
+    background: #3182ce;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Button Color Variants */
 #shuffle-btn { background: #9f7aea; }
 #shuffle-btn:hover { background: #805ad5; }
+
 #reset-progress-btn { background: #f56565; }
 #reset-progress-btn:hover { background: #e53e3e; }
-#prev-btn, #next-btn, #mark-known { background: #48bb78; }
-#prev-btn:hover, #next-btn:hover, #mark-known:hover { background: #38a169; }
-#mark-unknown { background: #ed8936; }
-#mark-unknown:hover { background: #dd6b20; }
-.flashcard-container { perspective: 1000px; margin-bottom: 30px; display: flex; justify-content: center; }
-.flashcard { width: 100%; max-width: 500px; height: 300px; position: relative; transform-style: preserve-3d; transition: 0.6s; cursor: pointer; }
-.flashcard.flipped { transform: rotateY(180deg); }
-.flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 20px; border-radius: 15px; background: #fff; text-align: center; }
-.flashcard-back { transform: rotateY(180deg); background: #f8f9fa; border: 2px solid #e9ecef; }
-.flashcard-front p, .flashcard-back p { font: bold 1.5em Arial; color: #2d3748; }
-#card-counter { font-weight: bold; color: #4a5568; }
-.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
-.modal-content { background: #fff; margin: 10% auto; padding: 30px; border-radius: 15px; width: 90%; max-width: 500px; }
-.close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
-.close:hover { color: #000; }
-.form-group { margin-bottom: 20px; }
-label { display: block; margin-bottom: 5px; font-weight: bold; color: #4a5568; }
-input[type="text"] { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 16px; }
-input[type="text"]:focus { outline: none; border-color: #4299e1; }
-#add-card-form button[type="submit"] { width: 100%; margin-top: 10px; }
-@media (max-width: 600px) { .controls, .navigation, .study-controls { flex-direction: column; } }
+
+.btn-success { background: #48bb78; }
+.btn-success:hover { background: #38a169; }
+
+.btn-warning { background: #ed8936; }
+.btn-warning:hover { background: #dd6b20; }
+
+/* Control Group Layouts */
+.controls, 
+.study-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+/* Flashcard Component Styles */
+.flashcard-container {
+    perspective: 1500px;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.flashcard {
+    width: 100%;
+    max-width: 550px;
+    height: 350px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+.flashcard.flipped {
+    transform: rotateY(180deg);
+}
+
+.flashcard-front, 
+.flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    border-radius: 20px;
+    background: #ffffff;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.flashcard-back {
+    transform: rotateY(180deg);
+    background: #fdfdfd;
+    border: 2px solid #edf2f7;
+}
+
+.flashcard-front p, 
+.flashcard-back p {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 20px;
+}
+
+.hint-text {
+    font-size: 0.8rem;
+    color: #a0aec0;
+    position: absolute;
+    bottom: 20px;
+}
+
+/* Navigation & Counter Styles */
+.counter-display {
+    font-weight: 700;
+    color: #4a5568;
+    font-size: 1.1rem;
+}
+
+/* Modal System Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: #ffffff;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close {
+    color: #a0aec0;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close:hover {
+    color: #2d3748;
+}
+
+/* Form Styling within Modal */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #4299e1;
+}
+
+.form-footer button {
+    width: 100%;
+}
+
+/* Responsive Adjustments for Mobile Devices */
+@media (max-width: 600px) {
+    .controls, 
+    .navigation, 
+    .study-buttons {
+        flex-direction: column;
+    }
+    
+    .navigation {
+        gap: 10px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+}
+
+/* Footer Copyright Styling */
+footer p {
+    color: #718096;
+    font-size: 0.9rem;
+}
 

@@ -3,72 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Language Learning Flashcards Application for learning new words and phrases.">
+    <meta name="author" content="Hemanth Chowdary">
     <title>Language Learning Flashcards</title>
+    <!-- Main Style Sheet -->
     <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts Import for better typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
+        <!-- Site Header - Displays the main title and real-time statistics -->
         <header>
             <h1>Language Learning Flashcards</h1>
             <div class="stats">
-                <span id="total-cards">Total: 0</span>
-                <span id="studied-cards">Studied: 0</span>
-                <span id="progress">Progress: 0%</span>
+                <div class="stat-item">
+                    <label>Total Cards:</label>
+                    <span id="total-cards">0</span>
+                </div>
+                <div class="stat-item">
+                    <label>Cards Studied:</label>
+                    <span id="studied-cards">0</span>
+                </div>
+                <div class="stat-item">
+                    <label>Current Progress:</label>
+                    <span id="progress">0%</span>
+                </div>
             </div>
         </header>
 
+        <!-- Main Content Area -->
         <main>
-            <div class="controls">
-                <button id="add-card-btn">Add New Card</button>
-                <button id="shuffle-btn">Shuffle Cards</button>
-                <button id="reset-progress-btn">Reset Progress</button>
-            </div>
+            <!-- Control Panel for app-level actions -->
+            <section class="controls">
+                <button id="add-card-btn" title="Create a new flashcard">Add New Card</button>
+                <button id="shuffle-btn" title="Randomize the current deck">Shuffle Cards</button>
+                <button id="reset-progress-btn" title="Clear all study progress">Reset Progress</button>
+            </section>
 
-            <div class="flashcard-container">
-                <div id="flashcard" class="flashcard">
+            <!-- The Flashcard Display Section -->
+            <section class="flashcard-container" aria-label="Flashcard Display">
+                <div id="flashcard" class="flashcard" tabindex="0" role="button" aria-pressed="false" title="Click to flip the card">
                     <div class="flashcard-front">
-                        <p id="front-text">Click "Add New Card" to start learning!</p>
+                        <p id="front-text">Loading...</p>
+                        <span class="hint-text">Click to Flip</span>
                     </div>
                     <div class="flashcard-back">
                         <p id="back-text">Translation will appear here</p>
+                        <span class="hint-text">Click to Flip Back</span>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="navigation">
-                <button id="prev-btn">Previous</button>
-                <span id="card-counter">0 / 0</span>
-                <button id="next-btn">Next</button>
-            </div>
+            <!-- Navigation Controls to move through the deck -->
+            <section class="navigation">
+                <button id="prev-btn" aria-label="Previous card">&larr; Previous</button>
+                <div class="counter-display">
+                    Card <span id="card-counter">0 / 0</span>
+                </div>
+                <button id="next-btn" aria-label="Next card">Next &rarr;</button>
+            </section>
 
-            <div class="study-controls">
-                <button id="mark-known">Know It</button>
-                <button id="mark-unknown">Need Practice</button>
-            </div>
+            <!-- Study Feedback Controls -->
+            <section class="study-controls">
+                <h2>Do you know this card?</h2>
+                <div class="study-buttons">
+                    <button id="mark-known" class="btn-success">I Know It</button>
+                    <button id="mark-unknown" class="btn-warning">Need Practice</button>
+                </div>
+            </section>
         </main>
 
-        <div id="add-card-modal" class="modal">
+        <!-- App Footer -->
+        <footer>
+            <p>&copy; 2024 Language Learning App - Master your vocabulary today.</p>
+        </footer>
+
+        <!-- Modal Overlay for adding new cards -->
+        <div id="add-card-modal" class="modal" aria-hidden="true">
             <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Add New Flashcard</h2>
+                <header class="modal-header">
+                    <h2>Add New Flashcard</h2>
+                    <span class="close" title="Close Modal">&times;</span>
+                </header>
                 <form id="add-card-form">
                     <div class="form-group">
-                        <label for="front-input">Word/Phrase (Front):</label>
-                        <input type="text" id="front-input" required>
+                        <label for="front-input">Word/Phrase (Front Side):</label>
+                        <input type="text" id="front-input" placeholder="Enter word to learn" required autocomplete="off">
                     </div>
                     <div class="form-group">
-                        <label for="back-input">Translation (Back):</label>
-                        <input type="text" id="back-input" required>
+                        <label for="back-input">Translation (Back Side):</label>
+                        <input type="text" id="back-input" placeholder="Enter translation" required autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="category-input">Category (Optional):</label>
-                        <input type="text" id="category-input" placeholder="e.g., verbs, nouns, greetings">
+                        <input type="text" id="category-input" placeholder="e.g., verbs, nouns, travel" autocomplete="off">
                     </div>
-                    <button type="submit">Add Card</button>
+                    <div class="form-footer">
+                        <button type="submit" class="btn-primary">Add Card to Deck</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <!-- Application Logic -->
     <script src="script.js"></script>
 </body>
 </html>
