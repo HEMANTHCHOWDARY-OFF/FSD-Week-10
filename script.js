@@ -1,3 +1,4 @@
+window.onerror = (m, u, l) => alert(`Error: ${m}\nLine: ${l}`);
 class FlashcardApp {
     constructor() {
         this.flashcards = [];
