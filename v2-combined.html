@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Learning Flashcards (V2)</title>
+    <style>
+        /* CSS from style.css */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea, #764ba2); min-height: 100vh; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header, .navigation { background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 30px; }
+        .navigation { padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+        h1 { color: #4a5568; margin-bottom: 15px; font-size: 2.5em; }
+        .stats, .controls, .study-controls { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 30px; }
+        .stats { justify-content: space-around; gap: 20px; }
+        .stats span { background: #f7fafc; padding: 8px 16px; border-radius: 20px; font-weight: bold; color: #4a5568; }
+        button { background: #4299e1; color: #fff; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font: bold 16px Arial; transition: 0.3s; }
+        button:hover { background: #3182ce; transform: translateY(-2px); }
+        #shuffle-btn { background: #9f7aea; }
+        #shuffle-btn:hover { background: #805ad5; }
+        #reset-progress-btn { background: #f56565; }
+        #reset-progress-btn:hover { background: #e53e3e; }
+        #prev-btn, #next-btn, #mark-known { background: #48bb78; }
+        #prev-btn:hover, #next-btn:hover, #mark-known:hover { background: #38a169; }
+        #mark-unknown { background: #ed8936; }
+        #mark-unknown:hover { background: #dd6b20; }
+        .delete-icon { position: absolute; top: 10px; right: 10px; background: #f56565; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; transition: 0.3s; z-index: 10; }
+        .delete-icon:hover { background: #e53e3e; transform: scale(1.1); }
+        .flashcard-container { perspective: 1000px; margin-bottom: 30px; display: flex; justify-content: center; }
+        .flashcard { width: 100%; max-width: 500px; height: 300px; position: relative; transform-style: preserve-3d; transition: 0.6s; cursor: pointer; }
+        .flashcard.flipped { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 20px; border-radius: 15px; background: #fff; text-align: center; }
+        .flashcard-back { transform: rotateY(180deg); background: #f8f9fa; border: 2px solid #e9ecef; }
+        .flashcard-front p, .flashcard-back p { font: bold 1.5em Arial; color: #2d3748; }
+        #card-counter { font-weight: bold; color: #4a5568; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+        .modal-content { background: #fff; margin: 10% auto; padding: 30px; border-radius: 15px; width: 90%; max-width: 500px; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: #000; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #4a5568; }
+        input[type="text"] { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 16px; }
+        input[type="text"]:focus { outline: none; border-color: #4299e1; }
+        #add-card-form button[type="submit"] { width: 100%; margin-top: 10px; }
+        @media (max-width: 600px) { .controls, .navigation, .study-controls { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Language Learning Flashcards (V2)</h1>
+            <div class="stats">
+                <span id="total-cards">Total: 0</span>
+                <span id="studied-cards">Studied: 0</span>
+                <span id="progress">Progress: 0%</span>
+            </div>
+        </header>
+
+        <main>
+            <div class="controls">
+                <button id="add-card-btn">Add New Card</button>
+                <button id="shuffle-btn">Shuffle Cards</button>
+                <button id="reset-progress-btn">Reset Progress</button>
+            </div>
+
+            <div class="flashcard-container">
+                <div id="flashcard" class="flashcard">
+                    <div class="flashcard-front">
+                        <span class="delete-icon" title="Delete Card">&times;</span>
+                        <p id="front-text">Click "Add New Card" to start learning!</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <span class="delete-icon" title="Delete Card">&times;</span>
+                        <p id="back-text">Translation will appear here</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button id="prev-btn">Previous</button>
+                <span id="card-counter">0 / 0</span>
+                <button id="next-btn">Next</button>
+            </div>
+
+            <div class="study-controls">
+                <button id="mark-known">Know It</button>
+                <button id="mark-unknown">Need Practice</button>
+            </div>
+        </main>
+
+        <div id="add-card-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Add New Flashcard</h2>
+                <form id="add-card-form">
+                    <div class="form-group">
+                        <label for="front-input">Word/Phrase (Front):</label>
+                        <input type="text" id="front-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="back-input">Translation (Back):</label>
+                        <input type="text" id="back-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category-input">Category (Optional):</label>
+                        <input type="text" id="category-input" placeholder="e.g., verbs, nouns, greetings">
+                    </div>
+                    <button type="button" id="submit-card">Add Card</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* JavaScript from script.js */
+        window.onerror = (m, u, l) => alert(`Error: ${m}\nLine: ${l}`);
+        class FlashcardApp {
+            constructor() {
+                this.flashcards = [];
+                this.currentIndex = 0;
+                this.studiedCards = new Set();
+                this.init();
+            }
+            init() {
+                this.loadFromStorage();
+                this.setupEventListeners();
+                this.updateDisplay();
+            }
+            setupEventListeners() {
+                const ids = {
+                    'flashcard': () => this.flipCard(),
+                    'prev-btn': () => this.navigate(-1),
+                    'next-btn': () => this.navigate(1),
+                    'add-card-btn': () => this.modal(1),
+                    'shuffle-btn': () => this.shuffle(),
+                    'reset-progress-btn': () => this.reset(),
+                    'mark-known': () => this.mark(true),
+                    'mark-unknown': () => this.mark(false)
+                };
+                Object.entries(ids).forEach(([id, cb]) => {
+                    document.getElementById(id)?.addEventListener('click', cb);
+                });
+                document.querySelectorAll('.delete-icon').forEach(icon => {
+                    icon.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.deleteCurrentCard();
+                    });
+                });
+                document.querySelector('.close').onclick = () => this.modal(0);
+                document.getElementById('submit-card').addEventListener('click', () => this.addCard());
+                window.onclick = (e) => e.target.id === 'add-card-modal' && this.modal(0);
+                document.onkeydown = (e) => {
+                    if (e.key === 'ArrowLeft') this.navigate(-1);
+                    if (e.key === 'ArrowRight') this.navigate(1);
+                    if (e.key === ' ') { e.preventDefault(); this.flipCard(); }
+                    if (e.key === 'Escape') this.modal(0);
+                };
+            }
+            flipCard() {
+                document.getElementById('flashcard').classList.toggle('flipped');
+                if (this.flashcards.length) { this.studiedCards.add(this.currentIndex); this.save(); this.updateDisplay(); }
+            }
+            navigate(dir) {
+                if (!this.flashcards.length) return;
+                document.getElementById('flashcard').classList.remove('flipped');
+                this.currentIndex = (this.currentIndex + dir + this.flashcards.length) % this.flashcards.length;
+                this.updateDisplay();
+            }
+            modal(show) {
+                document.getElementById('add-card-modal').style.display = show ? 'block' : 'none';
+                if (show) document.getElementById('front-input').focus();
+                else document.getElementById('add-card-form').reset();
+            }
+            addCard() {
+                const f = document.getElementById('front-input').value.trim();
+                const b = document.getElementById('back-input').value.trim();
+                const c = document.getElementById('category-input').value.trim() || 'general';
+                if (f && b) {
+                    const newCard = { id: Date.now(), front: f, back: b, category: c, known: false };
+                    this.flashcards.push(newCard); this.currentIndex = this.flashcards.length - 1;
+                    this.save(); this.updateDisplay(); this.modal(0); alert('Card Added Successfully!');
+                }
+            }
+            shuffle() {
+                if (!this.flashcards.length) return alert('No cards!');
+                this.flashcards.sort(() => Math.random() - 0.5);
+                this.currentIndex = 0; document.getElementById('flashcard').classList.remove('flipped');
+                this.updateDisplay(); alert('Shuffled!');
+            }
+            mark(known) {
+                if (!this.flashcards.length) return;
+                this.flashcards[this.currentIndex].known = known; this.save(); setTimeout(() => this.navigate(1), 500);
+            }
+            reset() {
+                if (this.flashcards.length && confirm('Reset progress?')) {
+                    this.studiedCards.clear(); this.flashcards.forEach(c => c.known = false);
+                    this.currentIndex = 0; document.getElementById('flashcard').classList.remove('flipped');
+                    this.save(); this.updateDisplay(); alert('Reset!');
+                }
+            }
+            deleteCurrentCard() {
+                if (!this.flashcards.length) return alert('No cards to delete!');
+                if (confirm('Are you sure you want to delete this card?')) {
+                    this.flashcards.splice(this.currentIndex, 1);
+                    if (this.currentIndex >= this.flashcards.length && this.flashcards.length > 0) this.currentIndex = this.flashcards.length - 1;
+                    else if (this.flashcards.length === 0) this.currentIndex = 0;
+                    this.save(); this.updateDisplay(); alert('Card Deleted!');
+                }
+            }
+            updateDisplay() {
+                const f = document.getElementById('front-text'), b = document.getElementById('back-text'), c = document.getElementById('card-counter'), len = this.flashcards.length;
+                if (!len) { f.textContent = 'Add a card!'; b.textContent = '...'; c.textContent = '0 / 0'; }
+                else {
+                    const cur = this.flashcards[this.currentIndex];
+                    f.textContent = cur.front; b.textContent = cur.back; c.textContent = `${this.currentIndex + 1} / ${len}`;
+                }
+                document.getElementById('total-cards').textContent = `Total: ${len}`;
+                document.getElementById('studied-cards').textContent = `Studied: ${this.studiedCards.size}`;
+                document.getElementById('progress').textContent = `Progress: ${len ? Math.round((this.studiedCards.size / len) * 100) : 0}%`;
+            }
+            save() {
+                try {
+                    const data = { 
+                        flashcards: this.flashcards, 
+                        currentIndex: this.currentIndex, 
+                        studiedCards: Array.from(this.studiedCards) 
+                    };
+                    localStorage.setItem('flashcardApp', JSON.stringify(data));
+                } catch (err) {
+                    console.warn("Storage failed:", err);
+                }
+            }
+            loadFromStorage() {
+                const d = JSON.parse(localStorage.getItem('flashcardApp') || '{}');
+                this.flashcards = d.flashcards || this.getSamples(); this.currentIndex = d.currentIndex || 0; this.studiedCards = new Set(d.studiedCards || []);
+            }
+            getSamples() {
+                return [
+                    { front: 'Hello', back: 'नमस्ते' }, { front: 'Thank you', back: 'धन्यवाद' }, { front: 'Goodbye', back: 'अलविदा' },
+                    { front: 'Please', back: 'कृपया' }, { front: 'Excuse me', back: 'माफ़ कीजिए' }, { front: 'How are you?', back: 'आप कैसे हैं?' },
+                    { front: 'My name is...', back: 'मेरा नाम... है' }, { front: 'What is your name?', back: 'आपका नाम क्या है?' },
+                    { front: 'Yes', back: 'हाँ' }, { front: 'No', back: 'नहीं' }
+                ].map((c, i) => ({ ...c, id: i, category: 'basic', known: false }));
+            }
+        }
+        const initApp = () => new FlashcardApp();
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
+    </script>
+</body>
+</html>
