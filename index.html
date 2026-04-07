@@ -1,8 +1,74 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Language Learning Flashcards</title><link rel="stylesheet" href="style.css"></head>
-<body><div class="container"><header><h1>Language Learning Flashcards</h1><div class="stats"><span id="total-cards">Total: 0</span><span id="studied-cards">Studied: 0</span><span id="progress">Progress: 0%</span></div></header>
-<main><div class="controls"><button id="add-card-btn">Add New Card</button><button id="shuffle-btn">Shuffle Cards</button><button id="reset-progress-btn">Reset Progress</button></div>
-<div class="flashcard-container"><div id="flashcard" class="flashcard"><div class="flashcard-front"><p id="front-text">Click "Add New Card" to start learning!</p></div><div class="flashcard-back"><p id="back-text">Translation will appear here</p></div></div></div>
-<div class="navigation"><button id="prev-btn">Previous</button><span id="card-counter">0 / 0</span><button id="next-btn">Next</button></div>
-<div class="study-controls"><button id="mark-known">Know It</button><button id="mark-unknown">Need Practice</button></div></main>
-<div id="add-card-modal" class="modal"><div class="modal-content"><span class="close">&times;</span><h2>Add New Flashcard</h2><form id="add-card-form"><div class="form-group"><label for="front-input">Word/Phrase (Front):</label><input type="text" id="front-input" required></div>
-<div class="form-group"><label for="back-input">Translation (Back):</label><input type="text" id="back-input" required></div><div class="form-group"><label for="category-input">Category (Optional):</label><input type="text" id="category-input" placeholder="e.g., verbs, nouns, greetings"></div><button type="submit">Add Card</button></form></div></div></div><script src="script.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Learning Flashcards</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Language Learning Flashcards</h1>
+            <div class="stats">
+                <span id="total-cards">Total: 0</span>
+                <span id="studied-cards">Studied: 0</span>
+                <span id="progress">Progress: 0%</span>
+            </div>
+        </header>
+
+        <main>
+            <div class="controls">
+                <button id="add-card-btn">Add New Card</button>
+                <button id="shuffle-btn">Shuffle Cards</button>
+                <button id="reset-progress-btn">Reset Progress</button>
+            </div>
+
+            <div class="flashcard-container">
+                <div id="flashcard" class="flashcard">
+                    <div class="flashcard-front">
+                        <p id="front-text">Click "Add New Card" to start learning!</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <p id="back-text">Translation will appear here</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button id="prev-btn">Previous</button>
+                <span id="card-counter">0 / 0</span>
+                <button id="next-btn">Next</button>
+            </div>
+
+            <div class="study-controls">
+                <button id="mark-known">Know It</button>
+                <button id="mark-unknown">Need Practice</button>
+            </div>
+        </main>
+
+        <div id="add-card-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Add New Flashcard</h2>
+                <form id="add-card-form">
+                    <div class="form-group">
+                        <label for="front-input">Word/Phrase (Front):</label>
+                        <input type="text" id="front-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="back-input">Translation (Back):</label>
+                        <input type="text" id="back-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category-input">Category (Optional):</label>
+                        <input type="text" id="category-input" placeholder="e.g., verbs, nouns, greetings">
+                    </div>
+                    <button type="submit">Add Card</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

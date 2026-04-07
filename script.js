@@ -68,11 +68,11 @@ class FlashcardApp {
         document.getElementById('progress').textContent = `Progress: ${len ? Math.round((this.studiedCards.size / len) * 100) : 0}%`;
     }
     save() {
-        localStorage.setItem('flashcardApp', JSON.stringify({ f: this.flashcards, i: this.currentIndex, s: Array.from(this.studiedCards) }));
+        localStorage.setItem('flashcardApp', JSON.stringify({ flashcards: this.flashcards, currentIndex: this.currentIndex, studiedCards: Array.from(this.studiedCards) }));
     }
     loadFromStorage() {
         const d = JSON.parse(localStorage.getItem('flashcardApp') || '{}');
-        this.flashcards = d.f || this.getSamples(); this.currentIndex = d.i || 0; this.studiedCards = new Set(d.s || []);
+        this.flashcards = d.flashcards || this.getSamples(); this.currentIndex = d.currentIndex || 0; this.studiedCards = new Set(d.studiedCards || []);
     }
     getSamples() {
         return [
