@@ -2,6 +2,20 @@
 
 Welcome to the technical guide for your Flashcard Application! This document is designed to explain **every single piece of code** as if you were explaining it to someone completely new to web development.
 
+## Table of Contents
+1. [Statistics Tracking](#1-statistics-tracking-total-studied-progress)
+2. [Flashcard 3D Animation](#2-flashcard-3d-animation-anatomy-of-flip)
+3. [Delete Functionality](#3-delete-functionality-safety--logic)
+4. [Navigation (Circular)](#4-navigation-circular-selection)
+5. [Shuffle Logic](#5-shuffle-logic-randomization)
+6. [Confidence Tracking](#6-confidence-tracking-known--practice)
+7. [Reset Logic](#7-reset-logic-state-management)
+8. [Add Card Modal](#8-add-card-modal-ui-tricks)
+9. [Data Persistence](#9-data-persistence-localstorage-architecture)
+10. [Responsive Design](#10-responsive-design-media-adaptation)
+11. [Keyboard Accessibility](#11-keyboard-accessibility-hotkeys)
+12. [Final Thoughts & Conclusion](#12-final-thoughts--conclusion)
+
 ---
 
 ## 1. Statistics Tracking (Total, Studied, Progress)
@@ -31,6 +45,9 @@ The "Dashboard" of your app. It tells the user how many cards they have, how man
     - `background`: A very light grey to make the box look clean.
     - `padding`: Adds "breathing room" inside the box so the text isn't touching the edges.
     - `border-radius: 20px`: This is the magic property that makes the corners perfectly round, creating a "pill" or "capsule" look.
+
+> [!TIP]
+> **Pro-Tip**: You can customize these colors in the CSS variables later to change the overall theme of the app with just one line of code!
 
 ### **The Logic (JavaScript)**
 ```javascript
@@ -80,7 +97,9 @@ The most visual part of the app. It makes a digital card feel like a real physic
     - `preserve-3d`: This tells the browser, "Treat this element like it's in a 3D movie!"
     - `transition: 0.6s`: This makes the flip smooth (half a second) instead of instant.
     - `rotateY(180deg)`: When we add the "flipped" class, the card spins halfway exactly like a door on a hinge.
-    - `backface-visibility: hidden`: This is the **most important part**. It hides the "back" of the front face so you don't see it mirrored when the card flips. It's like having real opaque paper.
+
+> [!IMPORTANT]
+> The `backface-visibility: hidden` property is what prevents the "front" text from showing up backward on the "back" of the card. It's like having real opaque paper.
 
 ---
 
@@ -95,6 +114,9 @@ icon.addEventListener('click', (e) => {
 });
 ```
 - **Explanation**: Because the "Delete Card" button is *inside* the card, clicking it would normally trigger a "Flip" (because you clicked on the card!). `e.stopPropagation()` tells the browser: "Stop the click right here; don't let it touch the card behind the button."
+
+> [!CAUTION]
+> Always use `e.stopPropagation()` when putting buttons inside clickable containers, otherwise you'll trigger two actions at once!
 
 ### **The Logic (JavaScript)**
 ```javascript
@@ -227,6 +249,12 @@ Because real productivity happens on the keyboard.
 if (e.key === ' ') { e.preventDefault(); this.flipCard(); }
 ```
 - **Technical Detail**: Normally, pressing the spacebar scrolls the web page down. `e.preventDefault()` tells the browser "Don't scroll! Just flip my card instead."
+
+---
+## 12. Final Thoughts & Conclusion
+This application demonstrates the power of combining **Semantic HTML**, **Modern CSS Animations**, and **Object-Oriented JavaScript**. By isolating logic into a single Class (`FlashcardApp`), the code remains maintainable, scalable, and easy to understand even for those new to programming.
+
+Happy Learning!
 
 ---
 *Created by Antigravity AI - Written for Clarity and Understanding*
