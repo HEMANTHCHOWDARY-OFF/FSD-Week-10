@@ -26,7 +26,7 @@ class FlashcardApp {
             document.getElementById(id)?.addEventListener('click', cb);
         });
         document.querySelector('.close').onclick = () => this.modal(0);
-        document.getElementById('add-card-form').addEventListener('submit', (e) => this.addCard(e));
+        document.getElementById('submit-card').addEventListener('click', () => this.addCard());
         window.onclick = (e) => e.target.id === 'add-card-modal' && this.modal(0);
         document.onkeydown = (e) => {
             if (e.key === 'ArrowLeft') this.navigate(-1);
@@ -50,9 +50,10 @@ class FlashcardApp {
         if (show) document.getElementById('front-input').focus();
         else document.getElementById('add-card-form').reset();
     }
-    addCard(e) {
-        e.preventDefault();
-        const f = document.getElementById('front-input').value.trim(), b = document.getElementById('back-input').value.trim(), c = document.getElementById('category-input').value.trim() || 'general';
+    addCard() {
+        const f = document.getElementById('front-input').value.trim();
+        const b = document.getElementById('back-input').value.trim();
+        const c = document.getElementById('category-input').value.trim() || 'general';
         if (f && b) {
             const newCard = { id: Date.now(), front: f, back: b, category: c, known: false };
             this.flashcards.push(newCard); this.currentIndex = this.flashcards.length - 1;
